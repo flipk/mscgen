@@ -1,0 +1,10 @@
+*.o
+*~
+Makefile
+config.h
+config.log
+config.status
+examples/*.msc
+.deps
+src/mscgen
+stamp-h1
