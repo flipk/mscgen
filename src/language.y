@@ -40,7 +40,7 @@ int yylex_destroy(void);
 #define YYERROR_VERBOSE
 
 /* Name of parameter that is passed to yyparse() */
-#define YYPARSE_PARAM yyparse_result
+// doesn't seem to work/matter on bison/fedora #define YYPARSE_PARAM yyparse_result
 
 #define YYMALLOC malloc_s
 
@@ -48,7 +48,9 @@ int yylex_destroy(void);
  *  Error handling function.  The TOK_XXX names are substituted for more
  *  understandable values that make more sense to the user.
  */
-void yyerror(const char *str)
+//PFK: i don't know what the first arg is on bison/fedora but it
+// doesn't seem to be an error string or token.
+void yyerror(const char *str, const char *msg)
 {
     static const char *tokNames[] = { "TOK_OCBRACKET",          "TOK_CCBRACKET",
                                       "TOK_OSBRACKET",          "TOK_CSBRACKET",
@@ -104,8 +106,9 @@ void yyerror(const char *str)
     int   t;
 
     /* Print standard message part */
-    fprintf(stderr, "Error detected at line %lu: ", lex_getlinenum());
+    fprintf(stderr, "Error detected at line %lu: %s\n", lex_getlinenum(), msg);
 
+#if 0 // this doesn't work with bison on fedora for some reason.
     /* Search for TOK */
     s = strstr(str, "TOK_");
     while(s != NULL)
@@ -147,6 +150,7 @@ void yyerror(const char *str)
     }
 
     fprintf(stderr, "%s.\n", str);
+#endif
 
     line = lex_getline();
     if(line != NULL)
@@ -223,6 +227,9 @@ Msc MscParse(FILE *in)
 
 
 %}
+
+// PFK: inform bison that yyparse should have an argument.
+%parse-param {void *yyparse_result}
 
 %token TOK_STRING TOK_QSTRING TOK_EQUAL TOK_COMMA TOK_SEMICOLON TOK_OCBRACKET TOK_CCBRACKET
        TOK_OSBRACKET TOK_CSBRACKET TOK_MSC

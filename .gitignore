@@ -8,3 +8,7 @@ examples/*.msc
 .deps
 src/mscgen
 stamp-h1
+src/language.c
+src/language.h
+src/lexer.c
+man/mscgen.1
