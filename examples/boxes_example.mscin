@@ -38,18 +38,21 @@ msc {
    C abox C [label="abox"], // Box (with "<>-sides") upon the line "C"
    |||; // This adds some space between the boxes here and the boxes below.
         //  - similar to an empty line in a text document.
-
-
    A abox B [label="abox"]; // Box spanning from A to B (covering both).
-   |||;
    B rbox C [label="rbox"];
-   |||;
-   A box A [label="box"],
-   B rbox B [label="rbox"],
-   C abox C [label="abox"],
    ---;
-   ---;
-
+   A -> B [label="A -> B",linecolour="red"];
+   B -> C [label="B -> C"],
+   A <- B [label="A <- B"];
+   A note A [label="this is a note\nwhich is multiline\nand is multiline"];
+   A => B [label="A => B",linecolour="red"];
+   B => C [label="B => C"],
+   A <= B [label="A <= B"];
+   A note C [label="this note is from A to C"];
+   A >> B [label="A >> B",linecolour="red"];
+   B >> C [label="B >> C"],
+   A << B [label="A << B"];
+   A =>> B [label="A =>> B",linecolour="red"];
+   B =>> C [label="B =>> C"],
+   A <<= B [label="A <<= B"];
 }
-
-

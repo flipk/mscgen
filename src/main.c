@@ -900,16 +900,34 @@ static RowInfo *computeCanvasSize(Msc           m,
 
             freeLabelLines(arcLabelLineCount, arcLabelLines);
 
-            /* Compute the height of this arc */
-            if(arcType != MSC_ARC_DISCO && arcType != MSC_ARC_DIVIDER && arcType != MSC_ARC_SPACE)
+            switch (arcType)
             {
-                ymax = ymin + gOpts.arcSpacing;
-                ymax += (M_Max(rowHeight[row].maxTextLines, 2) * textHeight);
-            }
-            else
-            {
+            case MSC_ARC_METHOD:
+            case MSC_ARC_RETVAL:
+            case MSC_ARC_SIGNAL:
+            case MSC_ARC_CALLBACK:
+            case MSC_ARC_DOUBLE:
+            case MSC_ARC_LOSS:
                 ymax = ymin + gOpts.arcSpacing;
                 ymax += (M_Max(rowHeight[row].maxTextLines, 1) * textHeight);
+                break;
+
+            case MSC_ARC_PARALLEL:
+            case MSC_ARC_BOX:
+            case MSC_ARC_ABOX:
+            case MSC_ARC_RBOX:
+            case MSC_ARC_NOTE:
+            case MSC_INVALID_ARC_TYPE:
+                ymax = ymin + gOpts.arcSpacing;
+                ymax += (M_Max(rowHeight[row].maxTextLines, 2) * textHeight);
+                break;
+
+            case MSC_ARC_DISCO:
+            case MSC_ARC_DIVIDER:
+            case MSC_ARC_SPACE:
+                ymax = ymin + gOpts.arcSpacing;
+                ymax += (M_Max(rowHeight[row].maxTextLines, 1) * textHeight);
+                break;
             }
 
             /* Update next potential row start */
@@ -921,7 +939,31 @@ static RowInfo *computeCanvasSize(Msc           m,
             /* Compute the dimensions for the completed row */
             rowHeight[row].ymin     = ymin;
             rowHeight[row].ymax     = nextYmin - gOpts.arcSpacing;
-            rowHeight[row].arcliney = rowHeight[row].ymin + (rowHeight[row].ymax - rowHeight[row].ymin) / 2;
+
+            switch (arcType)
+            {
+            case MSC_ARC_METHOD:
+            case MSC_ARC_RETVAL:
+            case MSC_ARC_SIGNAL:
+            case MSC_ARC_CALLBACK:
+            case MSC_ARC_DOUBLE:
+            case MSC_ARC_LOSS:
+                rowHeight[row].arcliney = rowHeight[row].ymax - 2;
+                break;
+
+            case MSC_ARC_PARALLEL:
+            case MSC_ARC_BOX:
+            case MSC_ARC_ABOX:
+            case MSC_ARC_RBOX:
+            case MSC_ARC_NOTE:
+            case MSC_INVALID_ARC_TYPE:
+            case MSC_ARC_DISCO:
+            case MSC_ARC_DIVIDER:
+            case MSC_ARC_SPACE:
+                rowHeight[row].arcliney = rowHeight[row].ymin + (rowHeight[row].ymax - rowHeight[row].ymin) / 2;
+                break;
+            }
+
             row++;
 
             /* Start new row */
